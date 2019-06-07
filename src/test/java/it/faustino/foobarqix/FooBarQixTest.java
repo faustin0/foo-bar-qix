@@ -8,8 +8,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.stream.Stream;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,5 +45,12 @@ public class FooBarQixTest {
     void shouldWriteTheNumber(int number) {
         var result = sut.emit(number);
         assertThat(result).isEqualTo(String.valueOf(number));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {15, 30})
+    void shouldWriteFooBar(int number) {
+        var result = sut.emit(number);
+        assertThat(result).isEqualTo("FooBar");
     }
 }
