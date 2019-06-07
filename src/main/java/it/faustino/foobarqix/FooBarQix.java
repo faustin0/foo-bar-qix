@@ -12,6 +12,7 @@ public class FooBarQix {
 
         result = validateFor3(param, result);
         result = validateFor5(param, result);
+        result = validateFor7(param, result);
 
         if (result.isEmpty()) {
             result = String.valueOf(param);
@@ -30,6 +31,14 @@ public class FooBarQix {
     public String validateFor3(int toValidate, String currentResult) {
         if (isDivisibleBy(toValidate, 3)) {
             currentResult = "Foo";
+            return currentResult;
+        }
+        return currentResult;
+    }
+
+    public String validateFor7(int toValidate, String currentResult) {
+        if (isDivisibleBy(toValidate, 7)) {
+            currentResult += "Qix";
             return currentResult;
         }
         return currentResult;

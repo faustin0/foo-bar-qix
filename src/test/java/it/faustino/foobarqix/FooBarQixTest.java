@@ -41,7 +41,7 @@ public class FooBarQixTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {1, 2, 4, 7})
+    @ValueSource(ints = {1, 2, 4})
     void shouldWriteTheNumber(int number) {
         var result = sut.emit(number);
         assertThat(result).isEqualTo(String.valueOf(number));
@@ -52,5 +52,19 @@ public class FooBarQixTest {
     void shouldWriteFooBar(int number) {
         var result = sut.emit(number);
         assertThat(result).isEqualTo("FooBar");
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {7, 14, 28})
+    void shouldWriteQix(int number) {
+        var result = sut.emit(number);
+        assertThat(result).isEqualTo("Qix");
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {21})
+    void shouldAddQix(int number) {
+        var result = sut.emit(number);
+        assertThat(result).isEqualTo("FooQix");
     }
 }
