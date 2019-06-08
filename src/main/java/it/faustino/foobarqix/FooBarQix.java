@@ -10,6 +10,7 @@ public class FooBarQix {
 
 
     private Map<Predicate<Integer>, Function<String, String>> decorations;
+    public static final String startingString = "";
 
     private FooBarQix() {
         this.decorations = new HashMap<>();
@@ -26,25 +27,13 @@ public class FooBarQix {
 
     public String emit(int param) {
 
-        Function<String, String> stringStringFunction = decorations.keySet().stream()
+        Function<String, String> fooBarQixDecorator = decorations.keySet().stream()
                 .filter(condition -> condition.test(param))
                 .map(condition -> decorations.get(condition))
                 .reduce(Function::andThen)
                 .orElseGet(() -> s -> String.valueOf(param));
 
-        return stringStringFunction.apply("");
-
-
-        /*var result = "";
-
-        result = validateFor3(param, result);
-        result = validateFor5(param, result);
-        result = validateFor7(param, result);
-
-        if (result.isEmpty()) {
-            result = String.valueOf(param);
-        }
-        return result;*/
+        return fooBarQixDecorator.apply(startingString);
     }
 
     public String validateFor5(int toValidate, String currentResult) {
@@ -77,12 +66,24 @@ public class FooBarQix {
     }
 
 
-    public String addsFoo(int i) {
+    public String addsFoo(int i, Predicate<String> isSearchedNumber, Function<String, String> func) {
         return String.valueOf(i).codePoints()
                 .mapToObj(p -> (char) p)
                 .map(String::valueOf)
                 .filter(s -> s.equals("3"))
+                //.filter(isSearchedNumber)
                 .map(s -> "Foo")
+                .reduce(String::concat)
+                .orElse("");
+    }
+
+    public Function<Integer, String> decorateWith(Predicate<String> condition, Function<String, String> func) {
+        return i -> String.valueOf(i)
+                .codePoints()
+                .mapToObj(p -> (char) p)
+                .map(String::valueOf)
+                .filter(condition)
+                .map(func)
                 .reduce(String::concat)
                 .orElse("");
     }

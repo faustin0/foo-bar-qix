@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -19,6 +20,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FooBarQixTest {
 
     FooBarQix sut;
+
+    @Mock
+    Predicate<String> mockStringPredicate;
+    @Mock
+    Predicate<Integer> mockIntPredicate;
+    @Mock
+    Function<String, String> mockFun;
 
     @BeforeEach
     void setUp() {
@@ -93,26 +101,40 @@ public class FooBarQixTest {
 
     @Test
     void shouldExecuteRegisteredDecorations() {
-        Predicate<Integer> mockPredicate = Mockito.mock(Predicate.class);
-        Function mockFun = Mockito.mock(Function.class);
 
         Mockito.doReturn(true).
-                when(mockPredicate)
+                when(mockIntPredicate)
                 .test(Mockito.any());
 
         FooBarQix.create()
-                .when(mockPredicate, mockFun)
+                .when(mockIntPredicate, mockFun)
                 .emit(5);
 
-        Mockito.verify(mockPredicate).test(Mockito.any());
+        Mockito.verify(mockIntPredicate).test(Mockito.any());
         Mockito.verify(mockFun).apply(Mockito.any());
     }
 
-    @ParameterizedTest
+    @Test
+    void shouldCreateDecoratorFunction() {
+        Mockito.doReturn(true).
+                when(mockStringPredicate)
+                .test(Mockito.any());
+        Mockito.doReturn("").
+                when(mockFun)
+                .apply(Mockito.anyString());
+
+        var decorator = sut.decorateWith(mockStringPredicate, mockFun);
+        decorator.apply(3);
+
+        Mockito.verify(mockStringPredicate).test(Mockito.any());
+        Mockito.verify(mockFun).apply(Mockito.any());
+    }
+
+   /* @ParameterizedTest
     @ValueSource(ints = {3345, 33, 1133, 345365})
     void shouldReturn_FooForEachThree(int number) {
         var result = sut.addsFoo(number);
         System.out.println(result);
         assertThat(result).isEqualTo("FooFoo");
-    }
+    }*/
 }
