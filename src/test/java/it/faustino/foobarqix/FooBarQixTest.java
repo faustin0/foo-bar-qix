@@ -50,7 +50,7 @@ public class FooBarQixTest {
 
     @ParameterizedTest
     @ValueSource(ints = {3, 6, 9, 12})
-    void shouldWriteFoo(int number) {
+    void shouldWrite_Foo(int number) {
         var result = sut.emit(number);
         assertThat(result).isEqualTo("Foo");
 
@@ -58,7 +58,7 @@ public class FooBarQixTest {
 
     @ParameterizedTest
     @ValueSource(ints = {5, 10, 20})
-    void shouldWriteBar(int number) {
+    void shouldWrite_Bar(int number) {
         var result = sut.emit(number);
         assertThat(result).isEqualTo("Bar");
     }
@@ -72,32 +72,24 @@ public class FooBarQixTest {
 
     @ParameterizedTest
     @ValueSource(ints = {15, 30})
-    void shouldWriteFooBar(int number) {
+    void shouldWrite_FooBar(int number) {
         var result = sut.emit(number);
         assertThat(result).isEqualTo("FooBar");
     }
 
     @ParameterizedTest
     @ValueSource(ints = {7, 14, 28})
-    void shouldWriteQix(int number) {
+    void shouldWrite_Qix(int number) {
         var result = sut.emit(number);
         assertThat(result).isEqualTo("Qix");
     }
 
     @ParameterizedTest
     @ValueSource(ints = {21})
-    void shouldAddQix(int number) {
+    void shouldAdd_Qix(int number) {
         var result = sut.emit(number);
         assertThat(result).isEqualTo("FooQix");
     }
-
-   /* @ParameterizedTest
-    @ValueSource(ints = {3, 13, 23, 33})
-    void shouldAddFooForEachThree(int number) {
-        var result = sut.emit(number);
-        String.valueOf(number).subSequence(0,1);
-        assertThat(result).contains("Foo");
-    }*/
 
     @Test
     void shouldExecuteRegisteredDecorations() {
@@ -114,5 +106,13 @@ public class FooBarQixTest {
 
         Mockito.verify(mockPredicate).test(Mockito.any());
         Mockito.verify(mockFun).apply(Mockito.any());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {3345, 33, 1133, 345365})
+    void shouldReturn_FooForEachThree(int number) {
+        var result = sut.addsFoo(number);
+        System.out.println(result);
+        assertThat(result).isEqualTo("FooFoo");
     }
 }

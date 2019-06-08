@@ -77,4 +77,13 @@ public class FooBarQix {
     }
 
 
+    public String addsFoo(int i) {
+        return String.valueOf(i).codePoints()
+                .mapToObj(p -> (char) p)
+                .map(String::valueOf)
+                .filter(s -> s.equals("3"))
+                .map(s -> "Foo")
+                .reduce(String::concat)
+                .orElse("");
+    }
 }
