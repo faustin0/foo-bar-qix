@@ -108,7 +108,8 @@ public class FooBarQixTest {
                 when(mockPredicate)
                 .test(Mockito.any());
 
-        sut.when(mockPredicate, mockFun)
+        FooBarQix.create()
+                .when(mockPredicate, mockFun)
                 .emit(5);
 
         Mockito.verify(mockPredicate).test(Mockito.any());
