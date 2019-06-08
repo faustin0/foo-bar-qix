@@ -38,11 +38,6 @@ public class FooBarQix {
         return res;
     }
 
-    public boolean isDivisibleBy(int dividend, int divisor) {
-        return dividend % divisor == 0;
-    }
-
-
     //TODO change name
     public static Function<Integer, String> decorateWith(String condition, String toAdd) {
         return i -> i.toString()

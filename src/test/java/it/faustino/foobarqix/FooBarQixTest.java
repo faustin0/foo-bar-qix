@@ -46,13 +46,17 @@ public class FooBarQixTest {
         Predicate<Integer> containsFive = n -> FooBarQix.containsNumber(5).test(n);
         Function<Integer, String> addBarForEachFive = s -> FooBarQix.decorateWith("5", "Bar").apply(s);
 
+        Predicate<Integer> containsSeven = n -> FooBarQix.containsNumber(5).test(n);
+        Function<Integer, String> addQixForEachSeven = s -> FooBarQix.decorateWith("7", "Qix").apply(s);
+
         sut = FooBarQix
                 .create()
                 .when(isDivisibleByThree, writeFoo)
                 .when(isDivisibleByFive, addBar)
                 .when(isDivisibleBySeven, addQuix)
                 .when(containsThree, addFooForEachThre)
-                .when(containsFive, addBarForEachFive);
+                .when(containsFive, addBarForEachFive)
+                .when(containsSeven, addQixForEachSeven);
     }
 
     @AfterEach
@@ -111,6 +115,12 @@ public class FooBarQixTest {
     void shouldReturn_FooBarBar(int number) {
         String result = sut.emit(number);
         assertThat(result).isEqualTo("FooBarBar");
+    }
+
+    @Test
+    void shouldReturn_FooQixFooBarQix() {
+        String result = sut.emit(357);
+        assertThat(result).isEqualTo("FooQixFooBarQix");
     }
 
 
