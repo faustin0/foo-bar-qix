@@ -125,6 +125,12 @@ public class FooBarQixTest {
 
 
     @Test
+    void shouldReturn_FooFooFoo() {
+        String result = sut.emit(33);
+        assertThat(result).isEqualTo("FooFooFoo");
+    }
+
+    @Test
     void shouldExecuteRegisteredDecorations() {
         Mockito.doReturn(true).
                 when(mockIntPredicate)
@@ -156,12 +162,5 @@ public class FooBarQixTest {
         int toSearch = 1;
         boolean test = FooBarQix.containsNumber(toSearch).test(input);
         assertThat(test).isFalse();
-    }
-
-    @Test
-    void shouldReturn_FooFooFoo() {
-        String result = sut.emit(33);
-
-        assertThat(result).isEqualTo("FooFooFoo");
     }
 }

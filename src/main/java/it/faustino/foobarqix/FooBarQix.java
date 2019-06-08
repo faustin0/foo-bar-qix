@@ -9,9 +9,7 @@ import java.util.function.Predicate;
 
 public class FooBarQix {
 
-
     private Map<Predicate<Integer>, Function<Integer, String>> decorations;
-    public static final String startingString = "";
 
     private FooBarQix() {
         this.decorations = new LinkedHashMap<>();
@@ -27,18 +25,15 @@ public class FooBarQix {
     }
 
     public String emit(int param) {
-
-        String res = decorations.keySet().stream()
+        return decorations.keySet().stream()
                 .filter(condition -> condition.test(param))
                 .map(condition -> decorations.get(condition))
-                .map(fun -> fun.apply(param))
+                .map(action -> action.apply(param))
                 .reduce(String::concat)
                 .orElseGet(() -> String.valueOf(param));
-
-        return res;
     }
 
-    //TODO change name
+    //TODO extract to class of function factory, and rename
     public static Function<Integer, String> decorateWith(String condition, String toAdd) {
         return i -> i.toString()
                 .codePoints()
