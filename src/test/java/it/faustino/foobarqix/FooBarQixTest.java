@@ -41,14 +41,18 @@ public class FooBarQixTest {
         Function<Integer, String> addQuix = s -> "Qix";
 
         Predicate<Integer> containsThree = n -> FooBarQix.containsNumber(3).test(n);
-        Function<Integer, String> addFoo = s -> FooBarQix.decorateWith("3", "Foo").apply(s);
+        Function<Integer, String> addFooForEachThre = s -> FooBarQix.decorateWith("3", "Foo").apply(s);
+
+        Predicate<Integer> containsFive = n -> FooBarQix.containsNumber(5).test(n);
+        Function<Integer, String> addBarForEachFive = s -> FooBarQix.decorateWith("5", "Bar").apply(s);
 
         sut = FooBarQix
                 .create()
                 .when(isDivisibleByThree, writeFoo)
                 .when(isDivisibleByFive, addBar)
                 .when(isDivisibleBySeven, addQuix)
-                .when(containsThree, addFoo);
+                .when(containsThree, addFooForEachThre)
+                .when(containsFive, addBarForEachFive);
     }
 
     @AfterEach
@@ -76,7 +80,7 @@ public class FooBarQixTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {5, 10, 20})
+    @ValueSource(ints = {10, 20})
     void shouldWrite_Bar_divisibleByFive(int number) {
         String result = sut.emit(number);
         assertThat(result).isEqualTo("Bar");
@@ -95,6 +99,20 @@ public class FooBarQixTest {
         String result = sut.emit(number);
         assertThat(result).isEqualTo("FooQix");
     }
+
+    @Test
+    void shouldReturn_BarBar() {
+        String result = sut.emit(5);
+        assertThat(result).isEqualTo("BarBar");
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {15, 45})
+    void shouldReturn_FooBarBar(int number) {
+        String result = sut.emit(number);
+        assertThat(result).isEqualTo("FooBarBar");
+    }
+
 
     @Test
     void shouldExecuteRegisteredDecorations() {
