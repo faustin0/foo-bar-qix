@@ -1,14 +1,41 @@
 package it.faustino.foobarqix;
 
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 public class FooBarQix {
 
 
-    public FooBarQix() {
+    private Map<Predicate<Integer>, Function<String, String>> decorations;
 
+    private FooBarQix() {
+        this.decorations = new HashMap<>();
+    }
+
+    public static FooBarQix create() {
+        return new FooBarQix();
+    }
+
+    public FooBarQix when(Predicate<Integer> condition, Function<String, String> action) {
+        this.decorations.put(condition, action);
+        return this;
     }
 
     public String emit(int param) {
-        var result = "";
+
+        Function<String, String> stringStringFunction = decorations.keySet().stream()
+                .filter(condition -> condition.test(param))
+                .map(condition -> decorations.get(condition))
+                .reduce(Function::andThen)
+                .orElseGet(() -> s -> String.valueOf(param));
+
+        return stringStringFunction.apply("");
+
+
+        /*var result = "";
 
         result = validateFor3(param, result);
         result = validateFor5(param, result);
@@ -17,7 +44,7 @@ public class FooBarQix {
         if (result.isEmpty()) {
             result = String.valueOf(param);
         }
-        return result;
+        return result;*/
     }
 
     public String validateFor5(int toValidate, String currentResult) {
