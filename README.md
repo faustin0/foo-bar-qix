@@ -1,5 +1,7 @@
 # foo-bar-qix
-FooBarQix kata
+FooBarQix kata  
+http://codingdojo.org/kata/FooBarQix/
+
 
 Rules
 
