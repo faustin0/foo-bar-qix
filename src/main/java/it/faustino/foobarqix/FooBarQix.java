@@ -1,7 +1,5 @@
 package it.faustino.foobarqix;
 
-import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -24,10 +22,10 @@ public class FooBarQix {
         return this;
     }
 
-    public String emit(int param) {
+    public String compute(int param) {
         return decorations.keySet().stream()
                 .filter(condition -> condition.test(param))
-                .map(condition -> decorations.get(condition))
+                .map(decorations::get)
                 .map(action -> action.apply(param))
                 .reduce(String::concat)
                 .orElseGet(() -> String.valueOf(param));

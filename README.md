@@ -3,6 +3,8 @@ FooBarQix kata
 http://codingdojo.org/kata/FooBarQix/
 
 
+You should implement a function compute(number) which implements the following rules  
+
 Rules
 
 * If the number is divisible by 3, write “Foo” instead of the number
