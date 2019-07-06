@@ -30,23 +30,4 @@ public class FooBarQix {
                 .reduce(String::concat)
                 .orElseGet(() -> String.valueOf(param));
     }
-
-    //TODO extract to class of function factory, and rename
-    public static Function<Integer, String> decorateWith(String condition, String toAdd) {
-        return i -> i.toString()
-                .codePoints()
-                .mapToObj(p -> (char) p)
-                .map(String::valueOf)
-                .filter(s -> s.equals(condition))
-                .map(s -> toAdd)
-                .reduce("", String::concat);
-    }
-
-    public static Predicate<Integer> containsNumber(int toSearch) {
-        return input -> String.valueOf(input)
-                .codePoints()
-                .mapToObj(p -> (char) p)
-                .map(String::valueOf)
-                .anyMatch(s -> s.equals(String.valueOf(toSearch)));
-    }
 }

@@ -13,6 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static it.faustino.foobarqix.Predicates.containsNumber;
+import static it.faustino.foobarqix.Predicates.isDivisibleBy;
+import static it.faustino.foobarqix.Functions.replace;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
@@ -21,42 +24,25 @@ public class FooBarQixTest {
     FooBarQix sut;
 
     @Mock
-    Predicate<String> mockStringPredicate;
-    @Mock
     Predicate<Integer> mockIntPredicate;
     @Mock
     Function<Integer, String> mockFun;
 
-    Predicate<Integer> isDivisibleByThree = n -> n % 3 == 0;
     Function<Integer, String> writeFoo = s -> "Foo";
 
     @BeforeEach
     void setUp() {
-        Predicate<Integer> isDivisibleByFive = n -> n % 5 == 0;
         Function<Integer, String> addBar = s -> "Bar";
-
-        Predicate<Integer> isDivisibleBySeven = n -> n % 7 == 0;
         Function<Integer, String> addQuix = s -> "Qix";
-
-        Predicate<Integer> containsThree = n -> FooBarQix.containsNumber(3).test(n);
-        Function<Integer, String> addFooForEachThre = s -> FooBarQix.decorateWith("3", "Foo").apply(s);
-
-        Predicate<Integer> containsFive = n -> FooBarQix.containsNumber(5).test(n);
-        Function<Integer, String> addBarForEachFive = s -> FooBarQix.decorateWith("5", "Bar").apply(s);
-
-        Predicate<Integer> containsSeven = n -> FooBarQix.containsNumber(7).test(n);
-        Function<Integer, String> addQixForEachSeven = s -> FooBarQix.decorateWith("7", "Qix").apply(s);
-
         sut = FooBarQix
                 .create()
-                .when(isDivisibleByThree, writeFoo)
-                .when(isDivisibleByFive, addBar)
-                .when(isDivisibleBySeven, addQuix)
-                .when(containsThree, addFooForEachThre)
-                .when(containsFive, addBarForEachFive)
-                .when(containsSeven, addQixForEachSeven);
+                .when(isDivisibleBy(3), writeFoo)
+                .when(isDivisibleBy(5), addBar)
+                .when(isDivisibleBy(7), addQuix)
+                .when(containsNumber(3), replace(3, "Foo"))
+                .when(containsNumber(5), replace(5, "Bar"))
+                .when(containsNumber(7), replace(7, "Qix"));
     }
-
 
     @Test
     void shouldCreateFooBarQix() {
@@ -75,8 +61,8 @@ public class FooBarQixTest {
     void shouldWrite_Foo_divisibleByThree(int number) {
         sut = FooBarQix
                 .create()
-                .when(isDivisibleByThree, writeFoo);
-         String result = sut.compute(number);
+                .when(isDivisibleBy(3), writeFoo);
+        String result = sut.compute(number);
         assertThat(result).isEqualTo("Foo");
     }
 
@@ -155,7 +141,7 @@ public class FooBarQixTest {
     void shouldBeTrue_IfContainsNumber() {
         int input = 35643;
         int toSearch = 3;
-        boolean test = FooBarQix.containsNumber(toSearch).test(input);
+        boolean test = containsNumber(toSearch).test(input);
         assertThat(test).isTrue();
     }
 
@@ -163,7 +149,7 @@ public class FooBarQixTest {
     void shouldBeFalse_IfNotContainsNumber() {
         int input = 35643;
         int toSearch = 1;
-        boolean test = FooBarQix.containsNumber(toSearch).test(input);
+        boolean test = containsNumber(toSearch).test(input);
         assertThat(test).isFalse();
     }
 }
